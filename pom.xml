@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.52</version>
+        <version>5.24</version> <!-- includes updated maven-hpi-plugin which internally bundles a specific version of Jetty -->
         <relativePath />
     </parent>
     <groupId>com.bmc.ims</groupId>
@@ -13,7 +13,7 @@
     <packaging>hpi</packaging>
     <properties>	
         <changelist>999999-SNAPSHOT</changelist>
-        <jenkins.version>2.387.2</jenkins.version>
+        <jenkins.version>2.479.1</jenkins.version>
         <java.level>11</java.level>
         <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
      </properties>
@@ -61,12 +61,27 @@
     		<artifactId>json</artifactId>
     		<version>20171018</version>    		
     	</dependency>
-    	<dependency>
+        <!-- Replacing JSON parsing libraries to org.json due to security vulnerabilities -->
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <!-- dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
+        </dependency-->
+        <!-- https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security -->
+        <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>script-security</artifactId>
-            <version>1.78</version>
+            <version>1378.vf25626395f49</version>
         </dependency>
-		<dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
 			<groupId>io.jenkins.plugins</groupId>
 			<artifactId>echarts-api</artifactId>
 			<version>4.6.0-8</version>
@@ -103,7 +118,8 @@
 						<skip>true</skip>
 					</configuration>
 				</plugin>
-				<!--plugin>
+
+				<!-- plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.9.0</version>
@@ -113,8 +129,8 @@
 						<release>17</release>
 						<verbose>true</verbose>
 					</configuration>
-				</plugin-->
-				<!--plugin>
+				</plugin -->
+				<!-- plugin>
 					<groupId>org.jenkins-ci.tools</groupId>
 					<artifactId>maven-hpi-plugin</artifactId>
 					<version>3.17</version>
