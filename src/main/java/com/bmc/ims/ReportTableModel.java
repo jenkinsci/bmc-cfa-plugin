@@ -1,9 +1,11 @@
 package com.bmc.ims;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.jenkins.plugins.datatables.TableColumn;
 import io.jenkins.plugins.datatables.TableModel;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,11 +31,11 @@ import java.util.Map;
 
 public class ReportTableModel extends TableModel {
 
-    private JSONArray ja;
+    private List<JsonObject> ja;
     String rptType;
 
 
-    public ReportTableModel(JSONArray ja, String rptType) {
+    public ReportTableModel(List<JsonObject> ja, String rptType) {
         super();
         this.ja = ja;
         this.rptType=rptType;
@@ -77,30 +79,34 @@ public class ReportTableModel extends TableModel {
         List<Object> rows = new ArrayList<>();
 
         //skip the header row
-        for (int i = 1; i < ja.length(); i++)
+        //for (int i = 1; i < ja.length(); i++)
+            for (JsonObject obj : this.ja) 
         {
-            JSONObject obj= (JSONObject) ja.get(i);
+
+            //JsonObject obj=  ja.get(i);
             Map<String, String> rowsMap = new HashMap<>();
-            rowsMap.put("jobName",obj.getString("jobName"));
+            rowsMap.put("jobName",obj.get("jobName").toString());
             if(this.rptType.equals("IMS"))
-                rowsMap.put("psbName",obj.getString("psbName"));
+                rowsMap.put("psbName",obj.get("psbName").toString());
             else
-                rowsMap.put("planName",obj.getString("planName"));
-            rowsMap.put("startTime",obj.getString("startTime"));
+                rowsMap.put("planName",obj.get("planName").toString());
+            rowsMap.put("startTime",obj.get("startTime").toString());
             if(this.rptType.equals("IMS")) {
-                rowsMap.put("chkpt#", obj.getString("chkpt#"));
-                rowsMap.put("chkptType", obj.getString("chkptType"));
+                rowsMap.put("chkpt#", obj.get("chkpt#").toString());
+                rowsMap.put("chkptType", obj.get("chkptType").toString());
             }
             else
-                rowsMap.put("commits#", obj.getString("commits#"));
+                rowsMap.put("commits#", obj.get("commits#").toString());
 
-            rowsMap.put("jobDuration",obj.getString("jobDuration"));
-            rowsMap.put("freqPerMin",obj.getString("freqPerMin"));
-            rowsMap.put("freqPerSec",obj.getString("freqPerSec"));
-            rowsMap.put("exceptions",obj.getString("exceptions"));
+            rowsMap.put("jobDuration",obj.get("jobDuration").toString());
+            rowsMap.put("freqPerMin",obj.get("freqPerMin").toString());
+            rowsMap.put("freqPerSec",obj.get("freqPerSec").toString());
+            rowsMap.put("exceptions",obj.get("exceptions").toString());
             rows.add(rowsMap);
 
         }
+
+
         //return rowsMap.entrySet().stream().filter(e -> e.getValue().matches(".*")).map(Map.Entry::getKey).collect(Collectors.toList());
         return rows;
     }

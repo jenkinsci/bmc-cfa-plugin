@@ -1,5 +1,7 @@
 package com.bmc.ims;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.hm.hafner.echarts.JacksonFacade;
 import edu.hm.hafner.echarts.Palette;
 import edu.hm.hafner.echarts.PieChartModel;
@@ -9,18 +11,20 @@ import hudson.model.Run;
 import io.jenkins.plugins.datatables.DefaultAsyncTableContentProvider;
 import io.jenkins.plugins.datatables.TableModel;
 import org.apache.commons.lang.ObjectUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReportViewModel extends DefaultAsyncTableContentProvider implements ModelObject {
-    JSONArray ja;
+    List<JsonObject> ja;
+    //JSONArray ja;
     Run owner;
     String rptType;
     ArrayList<ExceptionType> exceptions = new ArrayList<ExceptionType>();
 
-    public ReportViewModel(Run owner, JSONArray ja, String reportType) {
+    public ReportViewModel(Run owner, List<JsonObject> ja, String reportType) {
         super();
         this.ja = ja;
         this.owner=owner;
@@ -59,9 +63,9 @@ public class ReportViewModel extends DefaultAsyncTableContentProvider implements
         int moreThen5=0, lessThen60=0,others=0;
         //JSONArray ja=CsvFile.readCsvFile(file.getPath());
         //skip the headers and start from 1
-        for(int i=1;i<this.ja.length();i++)
-        {
-            JSONObject obj= (JSONObject) ja.get(i);
+
+        //for(int i=1;i<this.ja.length();i++)
+        for (JsonObject obj : this.ja) {
 
             String exceptionText=obj.get("exceptions").toString(); //*** More than 1 chkp / sec   ,
             String[] tmpArr=exceptionText.split("than");

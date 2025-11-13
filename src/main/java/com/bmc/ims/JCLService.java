@@ -6,9 +6,15 @@ package com.bmc.ims;
  * Copyright (c) BMC Software, Inc. 2019
  * All Rights Reserved.
  ***********************************************************************/
-
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hudson.AbortException;
 import hudson.model.TaskListener;
+import net.sf.json.JSONObject;
 
 //import org.json.JSONObject;
 
@@ -36,8 +42,8 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.json.JSONObject;
-import org.json.JSONArray;
+//import org.json.JSONObject;
+//import org.json.JSONArray;
 
 //import org.json.JSONArray;
 //import org.json.JSONObject;
@@ -316,11 +322,15 @@ public class JCLService {
 							if (debug) {
 								listener.getLogger().println("Response from Job Submission:\n" + sb.toString());
 							}
-							JSONObject resp = new JSONObject(sb.toString());
-							rc.jobId = resp.getString("jobid");
-							rc.jobName = resp.getString("jobname");
-//							rc.jobOwner = resp.getString("owner");
-							rc.jobStatus=resp.getString("status");
+
+                            Gson gson = new Gson();
+
+                            JsonObject resp =gson.fromJson(sb.toString(), JsonObject.class);
+
+							rc.jobId = resp.get("jobid").getAsString();
+							rc.jobName = resp.get("jobname").getAsString();
+//							rc.jobOwner = resp.get("owner").getAsString();
+							rc.jobStatus=resp.get("status").getAsString();
 //							rc.jobType = resp.getString("type");
 //							rc.numOfSpoolFiles= String.valueOf(resp.length());
 						}
@@ -359,13 +369,13 @@ public class JCLService {
 								response.append("\n");
 							}
 							in.close();
-							JSONObject resp = new JSONObject(response.toString());
-							rc.jobName = resp.getString("jobname");
-							rc.jobId = resp.getString("jobid");
+							JsonObject resp = JsonParser.parseString(response.toString()).getAsJsonObject();
+							rc.jobName = resp.get("jobname").getAsString();
+							rc.jobId = resp.get("jobid").getAsString();
 	//						rc.jobOwner = resp.getString("owner");
-							rc.jobStatus = resp.getString("status");
+							rc.jobStatus = resp.get("status").getAsString();
 	//						rc.jobType = resp.getString("type");
-							if (resp.getString("status").equals("OUTPUT")) {
+							if (resp.get("status").getAsString().equals("OUTPUT")) {
 	//							rc.jobRetCode = resp.getString("retcode");
 								if (debug)
 									listener.getLogger().println("Response from Job Status:\n " + response.toString());
@@ -419,17 +429,37 @@ public class JCLService {
 							while ((inputLine = in.readLine()) != null) {
 								response.append(inputLine);
 								response.append("\n");
+
 							}
 							in.close();
-							JSONArray resp = new JSONArray(response.toString());
-							JSONObject singleSpoolFile;
+
+                            Gson gson = new Gson();
+
+                            // Define the type of the target List
+                            Type listType = new TypeToken<List<spoolObj>>() {}.getType();
+
+                            // Convert the JSON array string to a List of MyObject
+                            List<spoolObj> myObjectList = gson.fromJson(response.toString(), listType);
+
+
+
+                            for (spoolObj obj : myObjectList) {
+                                rc.ddnamevalarr.add(obj.ddname);
+                                rc.idvalarr.add(obj.id);
+                            }
+
+                            /*
+							//JsonArray resp = new JsonArray(response.toString());
+							JsonObject singleSpoolFile;
 //							rc.numOfSpoolFiles = String.valueOf(resp.length());
+                            for( JsonObject obj : resp)
+                            {}
 							for (int i = 0; i < resp.length(); i++) {
 								singleSpoolFile = resp.getJSONObject(i);
 								rc.idvalarr.add(String.valueOf(singleSpoolFile.getInt("id")));
 								rc.ddnamevalarr.add(singleSpoolFile.getString("ddname"));
 							}
-
+                            */
 						}
 					} else {
 						if (debug)
@@ -610,8 +640,15 @@ public class JCLService {
 			}
 		}
 	}
-
-	
-
 }
 
+  class spoolObj {
+     String id;
+     String ddname;
+
+    // Constructors, getters, and setters
+     private spoolObj(String id, String ddname) {
+        this.id = id;
+        this.ddname = ddname;
+    }
+}

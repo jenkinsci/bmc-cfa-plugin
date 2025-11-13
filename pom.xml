@@ -13,7 +13,7 @@
     <packaging>hpi</packaging>
     <properties>	
         <changelist>999999-SNAPSHOT</changelist>
-        <jenkins.version>2.479.1</jenkins.version>
+        <jenkins.version>2.516.3</jenkins.version>
         <java.level>11</java.level>
         <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
      </properties>
@@ -56,18 +56,18 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
-    	<dependency>
+    	<!-- dependency>
     		<groupId>org.json</groupId>
     		<artifactId>json</artifactId>
     		<version>20171018</version>    		
-    	</dependency>
+    	</dependency -->
         <!-- Replacing JSON parsing libraries to org.json due to security vulnerabilities -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <!-- dependency>
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.13.2</version>
-        </dependency-->
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security -->
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
@@ -88,9 +88,50 @@
 		</dependency>
 		<dependency>
 			<groupId>io.jenkins.plugins</groupId>
-			<artifactId>bootstrap4-api</artifactId>
-			<version>4.4.1-10</version>
+			<artifactId>bootstrap5-api</artifactId>
+			<version>5.3.8-895.v4d0d8e47fea_d</version>
 		</dependency>
+        <dependency>
+            <groupId>io.jenkins.plugins</groupId>
+            <artifactId>font-awesome-api</artifactId>
+            <version>7.0.1-859.v128d3a_efb_6e5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jenkins.plugins</groupId>
+            <artifactId>plugin-util-api</artifactId>
+            <version>6.1167.v022176c7e0ca_</version>
+        </dependency>
+        <dependency>
+
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-api</artifactId>
+            <version>1384.vdc05a_48f535f</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-support</artifactId>
+            <version>1004.veee3a_d67cdb_9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>scm-api</artifactId>
+            <version>707.v749f968369d4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-step-api</artifactId>
+            <version>706.v518c5dcb_24c0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>structs</artifactId>
+            <version>338.v848422169819</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jenkins.plugins</groupId>
+            <artifactId>caffeine-api</artifactId>
+            <version>3.2.2-178.v353b_8428ed56</version>
+        </dependency>
 		<dependency>
 			<groupId>io.jenkins.plugins</groupId>
 			<artifactId>data-tables-api</artifactId>

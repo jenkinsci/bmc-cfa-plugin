@@ -1,30 +1,40 @@
 package com.bmc.ims;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CsvFile {
 
-    public static JSONArray readCsvFile(String csvFilePath) {
+    public static List<JsonObject> readCsvFile(String csvFilePath) {
 
         BufferedReader br = null;
         File file = new File(csvFilePath);
         //List<ReportView> report = new Vector<ReportView>();
 
-        JSONArray reportJsonArrayObj = new JSONArray();
+        List<JsonObject> jsonObjArr = new ArrayList<JsonObject>();
+
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.defaultCharset()));
            // br = new BufferedReader(new FileReader(file));
             String line = null;
 
+            int i=0;
             while ((line = br.readLine()) != null) {
-                String values[] = line.split(",");
-                reportJsonArrayObj.put(createJsonModel(values,file.getName()));
-
-
+                if(i>0) {
+                    String values[] = line.split(",");
+                    jsonObjArr.add(createJsonModel(values, file.getName()));
+                }
+                i++;
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -40,34 +50,36 @@ public class CsvFile {
             }
         }
 
-        return reportJsonArrayObj;
+        return jsonObjArr;
 
     }
-    private static JSONObject createJsonModel(String values[], String rptType)
+    //JOB,PLANNAME,START TIME,#COMMITS,,JOB DURATION,FREQ/MIN,FREQ/SEC,EXCEPTIONS
+    private static JsonObject createJsonModel(String values[], String rptType)
     {
-        JSONObject obj = new JSONObject();
-        obj.put("jobName",values[0]);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("jobName",values[0]);
+
         if(rptType.contains("DB2"))
         {
-            obj.put("planName", values[1]);
-            obj.put("startTime", values[2]);
-            obj.put("commits#", values[3]);
+            obj.addProperty("planName", values[1]);
+            obj.addProperty("startTime", values[2]);
+            obj.addProperty("commits#", values[3]);
             //#4 is blank
-            obj.put("jobDuration", values[5]);
-            obj.put("freqPerMin", values[6]);
-            obj.put("freqPerSec",values[7]);
-            obj.put("exceptions", values[8]);
+            obj.addProperty("jobDuration", values[5]);
+            obj.addProperty("freqPerMin", values[6]);
+            obj.addProperty("freqPerSec",values[7]);
+            obj.addProperty("exceptions", values[8]);
         }
         else if(rptType.contains("IMS") || rptType.contains("DLI") )
         {
-            obj.put("psbName", values[1]);
-            obj.put("startTime", values[2]);
-            obj.put("chkpt#", values[3]);
-            obj.put("chkptType", values[4]);
-            obj.put("jobDuration", values[5]);
-            obj.put("freqPerMin", values[6]);
-            obj.put("freqPerSec",values[7]);
-            obj.put("exceptions", values[8]);
+            obj.addProperty("psbName", values[1]);
+            obj.addProperty("startTime", values[2]);
+            obj.addProperty("chkpt#", values[3]);
+            obj.addProperty("chkptType", values[4]);
+            obj.addProperty("jobDuration", values[5]);
+            obj.addProperty("freqPerMin", values[6]);
+            obj.addProperty("freqPerSec",values[7]);
+            obj.addProperty("exceptions", values[8]);
 
         }
 
@@ -75,3 +87,4 @@ public class CsvFile {
         return obj;
     }
 }
+
