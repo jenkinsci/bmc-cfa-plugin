@@ -14,7 +14,7 @@
 ## Requirements <a name="req"></a>
 | Required software                        | Version |
 |------------------------------------------|---------|
-| Jenkins                                  | 5.24 |
+| Jenkins                                  | 2.516.3 |
 | BMC AMI Log Analyzer for IMS             | 1.7.00  |
 | z/OSMF                                   |         |
 
