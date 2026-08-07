@@ -16,7 +16,6 @@ import hudson.util.ListBoxModel;
 import hudson.util.Secret;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ApprovalContext;
@@ -29,6 +28,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import hudson.Util;
 
 
 @Extension // annotation is required when writing a pipeline compatible plugin
@@ -1388,7 +1388,7 @@ public class BmcCfaBuilder extends Builder implements SimpleBuildStep, Serializa
 
 			Jenkins.get().checkPermission(Jenkins.ADMINISTER);
 			
-			String tempValue = StringUtils.trimToEmpty(value);
+			String tempValue = Util.fixNull(value).trim();
 			if (tempValue.isEmpty())			
 				result = FormValidation.error("z/OSMF Port number is required!");				
 			
@@ -1402,7 +1402,7 @@ public class BmcCfaBuilder extends Builder implements SimpleBuildStep, Serializa
 
 			Jenkins.get().checkPermission(Jenkins.ADMINISTER);
 			
-			String tempValue = StringUtils.trimToEmpty(value);
+			String tempValue = Util.fixNull(value).trim();
 			if (tempValue.isEmpty())			
 				result = FormValidation.error("User name is required!");				
 			
@@ -1416,7 +1416,7 @@ public class BmcCfaBuilder extends Builder implements SimpleBuildStep, Serializa
 
 			Jenkins.get().checkPermission(Jenkins.ADMINISTER);
 			
-			String tempValue = StringUtils.trimToEmpty(value);
+			String tempValue = Util.fixNull(value).trim();
 			if (tempValue.isEmpty())			
 				result = FormValidation.error("Password is required!");				
 			
@@ -1430,7 +1430,7 @@ public class BmcCfaBuilder extends Builder implements SimpleBuildStep, Serializa
 
 			Jenkins.get().checkPermission(Jenkins.ADMINISTER);
 			
-			String tempValue = StringUtils.trimToEmpty(value);
+			String tempValue = Util.fixNull(value).trim();
 			if (tempValue.isEmpty())			
 				result = FormValidation.error("STEPLIB is required!");				
 			
