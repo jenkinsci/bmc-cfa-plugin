@@ -10,7 +10,6 @@ import hudson.model.ModelObject;
 import hudson.model.Run;
 import io.jenkins.plugins.datatables.DefaultAsyncTableContentProvider;
 import io.jenkins.plugins.datatables.TableModel;
-import org.apache.commons.lang.ObjectUtils;
 //import org.json.JSONArray;
 //import org.json.JSONObject;
 
